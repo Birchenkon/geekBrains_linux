@@ -1,0 +1,45 @@
+Бирченко А.Р.
+
+1.  Прочитать в методическом пособии о сигналах. 
+	Запустить в одном терминале программу nano. В другом терминале посмотреть PID процесса (используйте ps aux) и остановить с помощью kill, 
+	посылая разные типы сигналов (SIGHUP, SIGTERM, SIGSEGV, SIGILL). Чем отличается заверщение программы в зависимости от сигнала?
+
+	kill -s <название сигнала> <номер сигнала> (-s --> SIG is a signal name)
+
+	SIGHUP 		--> Получен SIGHUP или SIGTERM --> процесс просто завершается, закрывается и выводится в терминал уведомление
+	SIGTERM 	--> аналогисно SIGHUP
+	SIGSEGV 	--> Произошло аварийное завершение Nano!  Код: 11.  Пожалуйста, сообщите об ошибке. --> выводит исключение (ошибку)
+	SIGILL		--> Недопустимая инструкция (стек памяти сброшен на диск)
+
+	Разница в действии при поступлении сигнала (завершение, завершение с дампом памяти, остановка процесса, игнор и тд) и "выводе" в терминал (исключение, уведомление и тд). 
+
+2.  Самостоятельно найти информацию о том, какой сигнал посылается запущенной программе при нажатии комбинации ctrl+c и ctrl+d. 
+	Создайте файл при помощи команды cat > file_name, напишите текст и завершите комбинацией ctrl+d. Какой сигнал передадим процессу?
+
+	ctrl + c --> SIGINT (завершение, для nano не работает) без уведомлений 
+	ctrl + d --> SIGINT (но это не точно), завершение произошло без уведомлений
+
+3.  Изменить конфигурационный файл службы SSH: /etc/ssh/sshd_config, отключив аутентификацию по паролю PasswordAuthentication no. 
+	Выполните рестарт службы systemctl restart sshd (service sshd restart), верните аутентификацию по паролю, 
+	выполните reload службы systemctl reload sshd (services sshd reload). 
+	В чём различие между действиями restart и reload?
+
+	sudo vim /etc/ssh/sshd_config --> i --> изменяем yes на no --> :wq
+
+	systemctl restart sshd 
+
+	==== AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ===
+	Чтобы перезапустить «ssh.service», необходимо пройти аутентификацию.
+	Authenticating as: Birchenkon,,, (birchenkon)
+	Password: 
+	==== AUTHENTICATION COMPLETE ===
+
+	reload службы systemctl reload sshd
+
+	==== AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ===
+	Чтобы заставить «ssh.service» перечитать конфигурацию, необходимо пройти аутентификацию.
+	Authenticating as: Birchenkon,,, (birchenkon)
+	Password: 
+	==== AUTHENTICATION COMPLETE ===
+
+	=> первое - перезапуск сервиса, второе - "перерасчет"/"перепрочтение" конфигв
